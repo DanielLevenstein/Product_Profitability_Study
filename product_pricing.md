@@ -187,16 +187,36 @@ plt.savefig('images/num_colors_vs_profit0.png')
 
 
 ```python
-#
+# Material loss vs profit 0
 sns.kdeplot(data=df_price0, x='material_loss', y='profit', hue='num_colors')
 plt.title=f"Material Loss vs Price Original (COST_PER_COLOR = {COST_PER_COLOR})"
 plt.savefig("images/material_loss_vs_profit0.png")
 ```
 
-
     
 ![png](images/material_loss_vs_profit0.png)
+```python
+
+```
+
+
+```python
+# If you remove the items with high material loss profit still goes down as number of colors increases but the value no longer goes negative.
+df_low_material_loss = df_price0[df_price0['material_loss'] < 1]
+df_high_material_loss = df_price0[df_price0['material_loss'] > 1]
+
+sns.lineplot(data=df_low_material_loss, x='num_colors', y='profit', color='green')
+sns.lineplot(data=df_high_material_loss, x='num_colors', y='profit', color='red')
+plt.savefig("images/num_colors_vs_profit0_low_material_loss.png")
+df_price2 = df_low_material_loss.copy()
+# Green Low Material Loss items
+# Red  high material loss items
+```
+
+
     
+![png](images/num_colors_vs_profit0_low_material_loss.png)
+      
 
 
 #### Observations
@@ -204,9 +224,9 @@ plt.savefig("images/material_loss_vs_profit0.png")
 - As Material loss goes up profit goes down.
 - Some items in this set have stable material_loss as num_colors goes up.
 #### Suggestions
-- Vendor should do one of the following:
+- Vendor should do the following:
   - 1) Increase their price per color to keep profit from going negative.
-  - 2) Figure out what orders have a high material loss and remove those items from the store.
+  - 2) Remove items with high material loss from the store.
 #### Other Notes
 - Shipping and handling has a significant impact on final profit margins and may not have been calculated accurately in this chart.
 
@@ -259,8 +279,6 @@ plt.savefig('images/num_colors_vs_profit0.png')
     Median Profit: $57.96
     Hourly Profit: $132.95
     Mean Material Loss: $0.82
-
-
 
 
 
@@ -411,9 +429,136 @@ plt.savefig("images/ideal_dimensions_using_material_loss.png")
 - If the customer only specifies one value in their request we can use this equation to calculate the other value.
 
 ## Final Thoughts
-- Based on the profit vs num_color plots the optimal price for our products is 40 per order and 10 extra per color.
+
+### Profit Chart Comparisons
+
+
+```python
+#Final profit comparisons
+sns.lineplot(data=df_price0, x='num_colors', y='profit', color='red')
+sns.lineplot(data=df_price1, x='num_colors', y='profit', color='green')
+# Profit chart with material loss < 1
+df_profit2 = df_price0[df_price0['material_loss'] < 1]
+sns.lineplot(data=df_price2, x='num_colors', y='profit', color='yellow')
+# Since material_loss may be hard to calculate on the fly we can use the length and width parameters instead
+df_price3 = df_price0[(df_price0['length'] + df_price0['width']) <= 19]
+sns.lineplot(data=df_price3, x='num_colors', y='profit', color='orange')
+plt.savefig("images/profit_chart_comparison.png")
+```
+
+
+    
+![png](images/profit_chart_comparison.png)
+    
+
+
+### Price Ratings
+- Red Line: color surcharge = \\$5 with no limits on order dimensions. (Price0)
+- Green Line: color surcharge = \\$10 with no limits on order dimensions (Price1)
+- Yellow Line: color surcharge = \\$5 and material loss < 1 unit (Price2)
+- Orange Line: color surcharge = \\$5 and length + width == 19 (Price3)
+
+#### Observations
+- Of these 3 pricing schemes Price1, Price2, and Price3 are profitable while price0 is not.
+- Pricing structure 2 and 3 are close enough that they can be used interchangeably.
+- Pricing structure 3 is easier to calculate than pricing structure 2.
+### Suggestions
+- Client should choose pricing structure 1 or 3
+  - Price 1: color surcharge = \\$10 with no limits on order dimensions
+  - Price 3: color surcharge = \\$5 and length + width == 19
+
+
+```python
+#pricing_chart stats
+df_price1.name="Price 1"
+df_price2.name="Price 2"
+df_price3.name="Price 3"
+
+pricing_structures = [df_price1, df_price2, df_price3]
+result_headers = ['Name', 'Min Profit', 'Max Profit', 'Mean Profit', 'Median Profit', 'size']
+results = []
+for structure in pricing_structures :
+    results.append([
+        structure.name, structure.profit.min().round(2), structure.profit.max().round(2), structure.profit.mean().round(2),structure.profit.median().round(2),
+        structure.size])
+
+df_results = pd.DataFrame(results, columns=result_headers)
+df_results.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Min Profit</th>
+      <th>Max Profit</th>
+      <th>Mean Profit</th>
+      <th>Median Profit</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Price 1</td>
+      <td>43.59</td>
+      <td>87.57</td>
+      <td>59.83</td>
+      <td>57.96</td>
+      <td>3190</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Price 2</td>
+      <td>-1.00</td>
+      <td>33.00</td>
+      <td>26.83</td>
+      <td>29.00</td>
+      <td>2230</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Price 3</td>
+      <td>21.00</td>
+      <td>33.00</td>
+      <td>28.30</td>
+      <td>29.00</td>
+      <td>1540</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+
+#### Observations
+- Pricing structure 1 has a mean profit around \\$59
+- Pricing structure 3 has a mean profit around \\$28
+
+## Final Thoughts
+- Based on the profit vs num_color plots the optimal price for our products is \\$40 per order with a surcharge of \\$5 - \\$10 per color.
+- Client should remove items with high material loss from the store by limiting product whose length and width add up to 19.
 - Orders with large number of colors are likely to have higher material loss, but also have a potential for higher profit.
-- If the client wants to minimize material loss they should only offer products whose dimensions add up to less than 20.
 
 ##### Author
 - Product Profitability Report
