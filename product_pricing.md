@@ -154,7 +154,7 @@ plt.savefig("images/segment_length_vs_material_units.png")
     
 
 
-### Initial Profit Calculations
+### Profit Calculation 1
 
 
 ```python
@@ -193,10 +193,12 @@ plt.title=f"Material Loss vs Price Original (COST_PER_COLOR = {COST_PER_COLOR})"
 plt.savefig("images/material_loss_vs_profit0.png")
 ```
 
+
     
 ![png](images/material_loss_vs_profit0.png)
 ```python
-
+# Copy df for final report numbering
+df_price1 = df_price0.copy()
 ```
 
 
@@ -224,91 +226,11 @@ df_price2 = df_low_material_loss.copy()
 - As Material loss goes up profit goes down.
 - Some items in this set have stable material_loss as num_colors goes up.
 #### Suggestions
-- Vendor should do the following:
-  - 1) Increase their price per color to keep profit from going negative.
-  - 2) Remove items with high material loss from the store.
+- Vendor should remove items with high material loss from the store.
 #### Other Notes
 - Shipping and handling has a significant impact on final profit margins and may not have been calculated accurately in this chart.
 
-### Updated Prices
-
-#### Recalculating Material Price
-
-
-```python
-BASE_PRICE = 40
-COST_PER_COLOR = 10
-
-# Updating price estimates with data from client
-MATERIAL_PRICE_LIST = [14.94 / 2, 34.09 / 4, 48.60 / 10, 19.11 / 4] # Pulled from inventory orders
-MATERIAL_PRICE = np.mean(MATERIAL_PRICE_LIST)
-df_price1 = calculate_profit(df_price0, df_build_stats, MATERIAL_PRICE)
-print(f"BASE PRICE: ${BASE_PRICE}")
-print(f"COST PRICE: ${COST_PER_COLOR}")
-print(f"MATERIAL_PRICE: ${MATERIAL_PRICE.round(2)}")
-```
-
-    BASE PRICE: $40
-    COST PRICE: $10
-    MATERIAL_PRICE: $6.41
-
-
-##### Observations
-- Clients original material prices was close to accurate so we don't need to redo initial calculation.
-
-#### Rerunning Profit Calculations
-
-
-```python
-PROCESS_TIME_PER_ORDER = 0.45
-print(f"Lowest Profit: ${df_price1.profit.min().round(1)}")
-print(f"Highest Profit: ${df_price1.profit.max().round(2)}")
-print(f"Mean Profit: ${df_price1.profit.mean().round(2)}")
-print(f"Mean Material Loss: ${df_price1.material_loss.mean().round(2)}")
-print(f"Median Profit: ${df_price1.profit.median().round(2)}")
-print(f"Hourly Profit: ${(df_price1.profit.mean() / PROCESS_TIME_PER_ORDER).round(2)}")
-print(f"Mean Material Loss: ${df_price1.material_loss.mean().round(2)}")
-sns.boxplot(data=df_price0, x='num_colors', y='profit', hue='num_colors')
-plt.savefig('images/num_colors_vs_profit0.png')
-```
-
-    Lowest Profit: $43.6
-    Highest Profit: $87.57
-    Mean Profit: $59.83
-    Mean Material Loss: $0.82
-    Median Profit: $57.96
-    Hourly Profit: $132.95
-    Mean Material Loss: $0.82
-
-
-
-    
-![png](images/num_colors_vs_profit0.png)
-    
-
-
-
-```python
-sns.boxenplot(data=df_price1[profit_columns], x='profit')
-plt.savefig("images/profit_boxen.png")
-```
-
-
-    
-![png](images/profit_boxen.png)
-    
-
-
-##### Observations
-- The majority or the orders have a profit value between \\$25 and \\$55 after update.
-#### Suggestions
-- Client should have a base price of at least \\$40.
-- Client should have a per color surcharge of between \\$5 and \\$10
-
-## Material Loss Optimization
-
-
-### Mean Material Loss
+### Material Loss Calculations
 
 
 ```python
@@ -333,51 +255,25 @@ print(f"Material Loss Mean: ${df_price0['material_loss'].mean().round(2)}")
 - Most of the orders have a fairly low material_loss value
 - The negative values for material loss are a artifact of the seaborn kde function.
 
-### Num Colors vs. Material Loss
+#### Num Colors vs. Material Loss
 
 
 ```python
 sns.boxplot(data=df_price0, x='num_colors', y='material_loss', hue='num_colors')
-plt.savefig('images/material_loss_vs_num_colors1.png')
+plt.savefig('images/material_loss_vs_num_colors.png')
 ```
 
-
     
-![png](images/material_loss_vs_num_colors1.png)
+![png](images/material_loss_vs_num_colors.png)
     
 
 
-#### Observations
+##### Observations
 - Orders with a large number of colors have high variability in their profit margin.
 - As num_colors goes up material_loss goes up, but it doesn't go up uniformly across all orders.
-#### Suggestions
-- If the client can figure out what orders have a low material loss values profit could be increased significantly.
 
 
-### Material Loss vs. Profit
-
-
-```python
-sns.kdeplot(data=df_price1, x='material_loss', y='profit', hue='num_colors')
-plt.savefig("images/material_loss_vs_profit1.png")
-
-```
-
-
-    
-![png](images/material_loss_vs_profit1.png)
-    
-
-
-#### Observations
-- Two trend lines can be seen on this chart one for orders with a high material loss and one for orders with a low value.
-- The per color surcharge is enough to overcome the higher material loss for orders with multiple colors.
-- Items with low material loss values have significantly higher profit margins.
-- Additional Notes
-   - Projects with multiple colors will have a small amount of scrap material in each color so the calculated material loss value may be off.
-   - Scrap from one product could be used in future projects which is something these charts are unable to account for.
-
-### Material Loss Scatter Plots
+#### Material Loss Scatter Plots
 
 
 ```python
@@ -392,21 +288,6 @@ plt.savefig("images/material_loss_ideal_dimensions.png")
 
     
 ![png](images/material_loss_ideal_dimensions.png)
-    
-
-
-
-```python
-sns.pairplot(data=df_build_stats[material_loss_columns], hue='material_loss')
-plt.savefig('images/material_loss_pair_plot.png')
-
-```
-
-
-    
-![png](images/material_loss_pair_plot.png)
-    
-
 
 
 ```python
@@ -414,6 +295,7 @@ df_zero_loss = df_build_stats[df_build_stats['material_loss'] == 0]
 sns.lineplot(data=df_zero_loss[material_loss_columns], x='length', y='width')
 sns.regplot(data=df_zero_loss[material_loss_columns], x='length', y='width')
 plt.savefig("images/ideal_dimensions_using_material_loss.png")
+
 ```
 
 
@@ -422,27 +304,35 @@ plt.savefig("images/ideal_dimensions_using_material_loss.png")
     
 
 
-#### Observations
-- There seems to be an optimal set of values for length and width parameters that will minimize material loss.
-- Orders with length or width of 6 have the least waste.
-- For the optimal material_loss values length + width should be less than 20.
+##### Observations
+- For the optimal material_loss values length + width should be less than 19.
 - If the customer only specifies one value in their request we can use this equation to calculate the other value.
 
-## Final Thoughts
+## Filter Orders By Material Loss
+We are using two equations to filter items by material loss
+- Profit 2 includes all orders with material loss < 1
+- Profit 3 includes all orders with length + width < 19
+- Profit 2 requires an exact equation for material loss which makes it impractical to use in pricing scheme.
 
-### Profit Chart Comparisons
+
+```python
+df_profit1 = df_price0
+df_profit2 = df_price0[df_price0['material_loss'] < 1]
+df_profit3 = df_price0[(df_price0['length'] + df_price0['width']) <= 19]
+```
+
+## Final Profit Comparisons
 
 
 ```python
 #Final profit comparisons
-sns.lineplot(data=df_price0, x='num_colors', y='profit', color='red')
-sns.lineplot(data=df_price1, x='num_colors', y='profit', color='green')
+sns.lineplot(data=df_price1, x='num_colors', y='profit', color='red')
 # Profit chart with material loss < 1
 df_profit2 = df_price0[df_price0['material_loss'] < 1]
 sns.lineplot(data=df_price2, x='num_colors', y='profit', color='yellow')
 # Since material_loss may be hard to calculate on the fly we can use the length and width parameters instead
 df_price3 = df_price0[(df_price0['length'] + df_price0['width']) <= 19]
-sns.lineplot(data=df_price3, x='num_colors', y='profit', color='orange')
+sns.lineplot(data=df_price3, x='num_colors', y='profit', color='green')
 plt.savefig("images/profit_chart_comparison.png")
 ```
 
@@ -453,28 +343,26 @@ plt.savefig("images/profit_chart_comparison.png")
 
 
 ### Price Ratings
-- Red Line: color surcharge = \\$5 with no limits on order dimensions. (Price0)
-- Green Line: color surcharge = \\$10 with no limits on order dimensions (Price1)
+- Red Line: color surcharge = \\$5 with no limits on order dimensions. (Price1)
 - Yellow Line: color surcharge = \\$5 and material loss < 1 unit (Price2)
-- Orange Line: color surcharge = \\$5 and length + width == 19 (Price3)
+- Green Line: color surcharge = \\$5 and length + width == 19 (Price3)
 
 #### Observations
-- Of these 3 pricing schemes Price1, Price2, and Price3 are profitable while price0 is not.
+- Of these 3 pricing schemes Price2, and Price3 are profitable while price1 is not.
 - Pricing structure 2 and 3 are close enough that they can be used interchangeably.
 - Pricing structure 3 is easier to calculate than pricing structure 2.
 ### Suggestions
-- Client should choose pricing structure 1 or 3
-  - Price 1: color surcharge = \\$10 with no limits on order dimensions
-  - Price 3: color surcharge = \\$5 and length + width == 19
+- Client should charge \\$40 per item with a  \\$5 surcharge per additional color
+- Client should limit orders to ones who's length and width <=19
 
 
 ```python
 #pricing_chart stats
-df_price1.name="Price 1"
+df_price0.name="Price 1"
 df_price2.name="Price 2"
 df_price3.name="Price 3"
 
-pricing_structures = [df_price1, df_price2, df_price3]
+pricing_structures = [df_price0, df_price2, df_price3]
 result_headers = ['Name', 'Min Profit', 'Max Profit', 'Mean Profit', 'Median Profit', 'size']
 results = []
 for structure in pricing_structures :
@@ -519,28 +407,28 @@ df_results.head()
     <tr>
       <th>0</th>
       <td>Price 1</td>
-      <td>43.59</td>
-      <td>87.57</td>
-      <td>59.83</td>
-      <td>57.96</td>
+      <td>-28.0</td>
+      <td>33.0</td>
+      <td>17.31</td>
+      <td>25.0</td>
       <td>3190</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Price 2</td>
-      <td>-1.00</td>
-      <td>33.00</td>
+      <td>-1.0</td>
+      <td>33.0</td>
       <td>26.83</td>
-      <td>29.00</td>
+      <td>29.0</td>
       <td>2230</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Price 3</td>
-      <td>21.00</td>
-      <td>33.00</td>
+      <td>21.0</td>
+      <td>33.0</td>
       <td>28.30</td>
-      <td>29.00</td>
+      <td>29.0</td>
       <td>1540</td>
     </tr>
   </tbody>
@@ -549,16 +437,9 @@ df_results.head()
 
 
 
-
-
-#### Observations
-- Pricing structure 1 has a mean profit around \\$59
-- Pricing structure 3 has a mean profit around \\$28
-
-## Final Thoughts
-- Based on the profit vs num_color plots the optimal price for our products is \\$40 per order with a surcharge of \\$5 - \\$10 per color.
-- Client should remove items with high material loss from the store by limiting product whose length and width add up to 19.
-- Orders with large number of colors are likely to have higher material loss, but also have a potential for higher profit.
+## Client Suggestions
+- Based on the profit vs num_color plots the optimal price for our products is \\$40 per order with a surcharge of \\$5 per color.
+- Client should remove items with high material loss from the store by limiting product whose length and width add up to 19 to minimize material loss.
 
 ##### Author
 - Product Profitability Report

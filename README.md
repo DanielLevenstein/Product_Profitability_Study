@@ -21,28 +21,20 @@ This report was used to optimize the pricing and material loss calculations used
 - As num colors went up material loss went up.
 - Material loss did not go up evenly for all orders. 
 
-![png](images/material_loss_vs_num_colors1.png)
-### Material Loss vs Profit
-- As material loss went up profit went down.
-- Items with low material loss had a profit between \$40 and \$20 before adjustments
-
-![png](images/material_loss_vs_profit1.png)
+![png](images/material_loss_vs_num_colors.png)
 ### Profit Chart
 Four pricing structures were suggested in this report.
 - Red Line: color surcharge = \$5 with no limits on order dimensions. (Price0)
-- Green Line: color surcharge = \$10 with no limits on order dimensions (Price1)
 - Yellow Line: color surcharge = \$5 and material loss < 1 unit (Price2)
-- Orange Line: color surcharge = \$5 and length + width == 19 (Price3)
+- Green Line: color surcharge = \$5 and length + width == 19 (Price3)
 ![png](images/profit_chart_comparison.png)
 
 #### Final Profit Calculations
-- Pricing structure 1 has a mean profit around \$59
 - Pricing structure 3 has a mean profit around \$28
 
 ## Final Thoughts
-- Based on the profit vs num_color plots the optimal price for our products is \$40 per order with a surcharge of \$5 - \$10 per color.
+- Based on the profit vs num_color plots the optimal price for our products is \$40 per order with a surcharge of \$5 per color.
 - Client should remove items with high material loss from the store by limiting product whose length and width add up to 19.
-- Orders with large number of colors are likely to have higher material loss, but also have a potential for higher profit.
 
 ## Frameworks Versions at (09/16/2025)
 - python: 3.13
