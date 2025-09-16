@@ -154,7 +154,7 @@ plt.savefig("images/segment_length_vs_material_units.png")
     
 
 
-### Profit Calculation 1
+### Initial Profit Calculation
 
 
 ```python
@@ -321,6 +321,17 @@ df_profit2 = df_price0[df_price0['material_loss'] < 1]
 df_profit3 = df_price0[(df_price0['length'] + df_price0['width']) <= 19]
 ```
 
+## Increase Price Per Color
+
+
+```python
+COST_PER_COLOR1 = COST_PER_COLOR
+COST_PER_COLOR = 7
+COST_PER_COLOR2 = COST_PER_COLOR
+df_price4 = df_profit3.copy()
+df_price4 = calculate_profit(df_price4, df_build_stats, COST_PER_COLOR2)
+```
+
 ## Final Profit Comparisons
 
 
@@ -331,8 +342,10 @@ sns.lineplot(data=df_price1, x='num_colors', y='profit', color='red')
 df_profit2 = df_price0[df_price0['material_loss'] < 1]
 sns.lineplot(data=df_price2, x='num_colors', y='profit', color='yellow')
 # Since material_loss may be hard to calculate on the fly we can use the length and width parameters instead
-df_price3 = df_price0[(df_price0['length'] + df_price0['width']) <= 19]
-sns.lineplot(data=df_price3, x='num_colors', y='profit', color='green')
+
+df_price3 = df_price0[(df_price0['length'] + df_price0['width']) <= 19].copy()
+sns.lineplot(data=df_price3, x='num_colors', y='profit', color='orange')
+sns.lineplot(data=df_price4, x='num_colors', y='profit', color='green')
 plt.savefig("images/profit_chart_comparison.png")
 ```
 
@@ -345,15 +358,17 @@ plt.savefig("images/profit_chart_comparison.png")
 ### Price Ratings
 - Red Line: color surcharge = \\$5 with no limits on order dimensions. (Price1)
 - Yellow Line: color surcharge = \\$5 and material loss < 1 unit (Price2)
-- Green Line: color surcharge = \\$5 and length + width == 19 (Price3)
+- Orange Line: color surcharge = \\$5 and length + width == 19 (Price3)
+- Green Line: color surcharge = \\$7 and length + width == 19 (Price4)
 
 #### Observations
-- Of these 3 pricing schemes Price2, and Price3 are profitable while price1 is not.
-- Pricing structure 2 and 3 are close enough that they can be used interchangeably.
-- Pricing structure 3 is easier to calculate than pricing structure 2.
+- Of these 3 pricing schemes price 2, price 3, and price 4 are profitable while price 1 is not.
+- Price structure 4 has the highest profit margin.
+- Pricing structure 2 and 3 are very similar but price 3 is easier to calculate.
+
 ### Suggestions
-- Client should charge \\$40 per item with a  \\$5 surcharge per additional color
-- Client should limit orders to ones who's length and width <=19
+- Client should charge \\$40 per item with a  \\$5 - \\$7 surcharge per additional color
+- Client should limit orders to ones whose length and width <=19
 
 
 ```python
@@ -361,8 +376,9 @@ plt.savefig("images/profit_chart_comparison.png")
 df_price0.name="Price 1"
 df_price2.name="Price 2"
 df_price3.name="Price 3"
+df_price4.name="Price 4"
 
-pricing_structures = [df_price0, df_price2, df_price3]
+pricing_structures = [df_price0, df_price2, df_price3, df_price4]
 result_headers = ['Name', 'Min Profit', 'Max Profit', 'Mean Profit', 'Median Profit', 'size']
 results = []
 for structure in pricing_structures :
@@ -431,6 +447,15 @@ df_results.head()
       <td>29.0</td>
       <td>1540</td>
     </tr>
+    <tr>
+      <th>3</th>
+      <td>Price 4</td>
+      <td>38.5</td>
+      <td>59.5</td>
+      <td>46.73</td>
+      <td>45.5</td>
+      <td>1540</td>
+    </tr>
   </tbody>
 </table>
 </div>
@@ -438,7 +463,7 @@ df_results.head()
 
 
 ## Client Suggestions
-- Based on the profit vs num_color plots the optimal price for our products is \\$40 per order with a surcharge of \\$5 per color.
+- Based on the profit vs num_color plots the optimal price for our products is \\$40 per order with a surcharge of \\$5 - \\$7 per color.
 - Client should remove items with high material loss from the store by limiting product whose length and width add up to 19 to minimize material loss.
 
 ##### Author
