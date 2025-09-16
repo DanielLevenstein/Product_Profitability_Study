@@ -1,9 +1,3 @@
-# Original Version
-#### Etsy Profitability and Material Loss Study
-- The numbers in this study were pulled from a client selling handmade goods on Etsy.
-- The details about the orders have been removed form this analysis but the numbers used were real. 
-- This project was posted on GitHub with permission from client.
-
 # Etsy Product Profitability and Material Loss Report
 This report was used to optimize the pricing and material loss calculations used by a local Etsy store. 
 - The numbers in this study were pulled from a client selling handmade goods on Etsy.
@@ -23,14 +17,11 @@ This report was used to optimize the pricing and material loss calculations used
 
 ![png](images/material_loss_vs_num_colors.png)
 ### Profit Chart
-Four pricing structures were suggested in this report.
+Three pricing structures were suggested in this report.
 - Red Line: color surcharge = \$5 with no limits on order dimensions. (Price0)
 - Yellow Line: color surcharge = \$5 and material loss < 1 unit (Price2)
 - Green Line: color surcharge = \$5 and length + width == 19 (Price3)
 ![png](images/profit_chart_comparison.png)
-
-#### Final Profit Calculations
-- Pricing structure 3 has a mean profit around \$28
 
 ## Final Thoughts
 - Based on the profit vs num_color plots the optimal price for our products is \$40 per order with a surcharge of \$5 per color.
