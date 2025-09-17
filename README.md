@@ -1,14 +1,14 @@
 # Etsy Product Profitability and Material Loss Report
 This report was used to optimize the pricing and material loss calculations used by a local Etsy store. 
 - The numbers in this study were pulled from a client selling handmade goods on Etsy.
-- The details about the orders have been removed form this analysis but the numbers used were real. 
-- This project was posted on GitHub with permission from client. 
+- The details about the orders have been removed from this analysis but the numbers used were real. 
+- This project was posted on GitHub with permission from a client. 
 
 ## Features
 - Generates synthetic data for test analysis using Panda DataFrames.
 - Calculates profit and material loss from order length and width.
 - Compares different pricing structure for product and calculates margins for each.
-- Generates HTML report for client using Jupyter notebook.
+- Generates an HTML report for a client using Jupyter notebook.
 
 ## Findings
 ### Material Loss vs Num Colors
@@ -24,13 +24,13 @@ Four pricing structures were suggested in this report.
 ### Price Ratings
 - Red Line: color surcharge = \$5 with no limits on order dimensions. (Price1)
 - Yellow Line: color surcharge = \$5 and material loss < 1 unit (Price2)
-- Orange Line: color surcharge = \$5 and length + width == 19 (Price3)
-- Green Line: color surcharge = \$7 and length + width == 19 (Price4)
+- Orange Line: color surcharge = \$5 and length and width add up to 19 (Price3)
+- Green Line: color surcharge = \$7 and length and width add up to 19 (Price4)
 
 #### Observations
-- Of these 3 pricing schemes price 2, price 3, and price 4 are profitable while price 1 is not.
+- Of these three pricing schemes, prices 2, price 3, and price 4 are profitable while price 1 is not.
 - Price structure 4 has the highest profit margin.
-- Pricing structure 2 and 3 are very similar but price 3 is easier to calculate.
+- Pricing structures 2 and 3 are very similar, but price 3 is easier to calculate.
 
 ### Suggestions
 - Client should charge \$40 per item with a  \$5 - \$7 surcharge per additional color
