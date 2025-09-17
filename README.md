@@ -38,61 +38,12 @@ Four pricing structures were suggested in this report.
 ## Final Pricing Chart
 
 
-
-<div>
-
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Name</th>
-      <th>Min Profit</th>
-      <th>Max Profit</th>
-      <th>Mean Profit</th>
-      <th>Median Profit</th>
-      <th>size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Price 1</td>
-      <td>-28.0</td>
-      <td>33.0</td>
-      <td>17.31</td>
-      <td>25.0</td>
-      <td>3190</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Price 2</td>
-      <td>-1.0</td>
-      <td>33.0</td>
-      <td>26.83</td>
-      <td>29.0</td>
-      <td>2230</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Price 3</td>
-      <td>21.0</td>
-      <td>33.0</td>
-      <td>28.30</td>
-      <td>29.0</td>
-      <td>1540</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Price 4</td>
-      <td>38.5</td>
-      <td>59.5</td>
-      <td>46.73</td>
-      <td>45.5</td>
-      <td>1540</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+| Name    | Min Profit | Max Profit | Mean Profit | Median Profit | Size |
+|---------|------------|------------|-------------|---------------|------|
+| Price 1 | -28.0      | 33.0       | 17.31       | 25.0          | 3190 |
+| Price 2 | -1.0       | 33.0       | 26.83       | 29.0          | 2230 |
+| Price 3 | 21.0       | 33.0       | 28.30       | 29.0          | 1540 |
+| Price 4 | 38.5       | 59.5       | 46.73       | 45.5          | 1540 |
 
 
 ## Frameworks Versions at (09/16/2025)
