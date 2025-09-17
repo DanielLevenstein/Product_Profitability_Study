@@ -37,14 +37,12 @@ Four pricing structures were suggested in this report.
 - Client should limit orders to ones whose length and width <=19
 ## Final Pricing Chart
 
-
-| Name    | Min Profit | Max Profit | Mean Profit | Median Profit | Size |
-|---------|------------|------------|-------------|---------------|------|
-| Price 1 | -28.0      | 33.0       | 17.31       | 25.0          | 3190 |
-| Price 2 | -1.0       | 33.0       | 26.83       | 29.0          | 2230 |
-| Price 3 | 21.0       | 33.0       | 28.30       | 29.0          | 1540 |
-| Price 4 | 38.5       | 59.5       | 46.73       | 45.5          | 1540 |
-
+| Name    | Min Profit | Max Profit | Mean Profit | Median Profit | 
+|---------|------------|------------|-------------|---------------|
+| Price 1 | -28.0      | 33.0       | 17.31       | 25.0          |
+| Price 2 | -1.0       | 33.0       | 26.83       | 29.0          |
+| Price 3 | 21.0       | 33.0       | 28.30       | 29.0          |
+| Price 4 | 38.5       | 59.5       | 46.73       | 45.5          |
 
 ## Frameworks Versions at (09/16/2025)
 - python: 3.13
@@ -55,6 +53,7 @@ Four pricing structures were suggested in this report.
 - jupyter_client: 8.6.3
 - jupyter_core: 5.8.1
 - jupyter_server: 2.17.0
+
 # Project 
 - Product Profitability Report
 - Daniel Levenstein
