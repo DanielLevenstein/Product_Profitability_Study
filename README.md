@@ -55,7 +55,7 @@ Four pricing structures were suggested in this report.
 - jupyter_client: 8.6.3
 - jupyter_core: 5.8.1
 - jupyter_server: 2.17.0
-# Author 
+# Project 
 - Product Profitability Report
 - Daniel Levenstein
 - Date: 09/16/2025
